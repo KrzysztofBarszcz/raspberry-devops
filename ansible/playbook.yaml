@@ -1,0 +1,9 @@
+- name: Installation
+  hosts: myhosts
+  remote_user: krzysztof
+  vars_files:
+  - vars.yaml
+
+  tasks:
+  - name: Install sdkman
+    shell: curl -s "https://get.sdkman.io" | bash
