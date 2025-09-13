@@ -7,3 +7,8 @@
   tasks:
   - name: Install sdkman
     shell: curl -s "https://get.sdkman.io" | bash
+
+  - name: Load sdkman
+    shell:
+      cmd: source ~/.sdkman/bin/sdkman-init.sh && sdk install java {{ java_version }}
+      executable: /bin/bash
