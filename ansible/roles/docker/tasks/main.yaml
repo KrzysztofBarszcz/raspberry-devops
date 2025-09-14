@@ -1,0 +1,43 @@
+- name: Install ca-certificates
+  apt:
+    name: ca-certificates
+
+- name: Get information about docker key
+  stat:
+    path: "{{ keyring_file }}"
+  register: docker_key
+
+- name: Display if key exists
+  debug:
+    msg: "Key exists: {{ docker_key.stat.exists }}" 
+
+- name: Change file ownerships
+  file:
+    path: "{{ keyring_path }}"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Download key if doesn't exist
+  get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: "{{ keyring_file }}"
+    mode: "0444"
+  become: true
+  when: docker_key.stat.exists == false
+
+- name: Add the repository into sources list
+  apt_repository: 
+    repo: "deb [signed-by={{ keyring_file }}] https://download.docker.com/linux/debian bookworm stable"
+    filename: docker
+  become: true
+    
+- name: Install Docker
+  apt:
+    name:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+  become: true
