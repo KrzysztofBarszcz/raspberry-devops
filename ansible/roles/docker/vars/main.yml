@@ -1,0 +1,2 @@
+keyring_path: "/etc/apt/keyrings"
+keyring_file: "{{ keyring_path }}/docker.asc"
